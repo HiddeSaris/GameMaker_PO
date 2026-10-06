@@ -2,6 +2,9 @@ gpu_set_ztestenable(true);
 gpu_set_zwriteenable(true);
 gpu_set_cullmode(cull_counterclockwise);
 
+znear = 0.1
+zfar  = 1000
+
 xto = 0;
 yto = 0;
 zto = 0;

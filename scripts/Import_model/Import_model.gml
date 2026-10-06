@@ -161,17 +161,17 @@ function import_obj(filename, vertex_format){
 	                vertex_add_point(vb, v1_position.x, v1_position.y, v1_position.z, 
 	                                v1_normal.x, v1_normal.y, v1_normal.z, 
 	                                v1_texcoord.x, v1_texcoord.y,
-	                                c_white, 1);
+                                    c_white, 1);
 					
 	                vertex_add_point(vb, v2_position.x, v2_position.y, v2_position.z, 
 	                                v2_normal.x, v2_normal.y, v2_normal.z, 
 	                                v2_texcoord.x, v2_texcoord.y,
-	                                c_white, 1);
+                                    c_white, 1);
 					
 	                vertex_add_point(vb, v3_position.x, v3_position.y, v3_position.z, 
 	                                v3_normal.x, v3_normal.y, v3_normal.z, 
 	                                v3_texcoord.x, v3_texcoord.y,
-	                                c_white, 1);
+                                    c_white, 1);
 				}
 			break;
         }
@@ -182,4 +182,53 @@ function import_obj(filename, vertex_format){
     //vertex_freeze(vb);
     
     return vb;
+}
+
+function import_obj_collision(filename/*, vertex_type, index_type*/) {
+	var file = file_text_open_read(filename);
+	var position = ds_list_create();
+	var index = ds_list_create();
+	var vertices_per_face = array_create(0);
+	
+	while (!file_text_eof(file))
+	{
+	    var line = file_text_readln(file);
+		var tokens = string_split(line, " ", true);
+		if(tokens[0] == "v") {
+			ds_list_add(position, real(tokens[1]), -real(tokens[2]), real(tokens[3]));
+		} else if (tokens[0] == "f") {
+			for(var i = array_length(tokens) - 1; i >= 1; i--) {
+				var first = string_split(tokens[i], "/", true);
+				ds_list_add(index, real(first[0]) - 1);
+			}
+			
+			array_push(vertices_per_face, array_length(tokens) - 1);
+		}
+	}
+	
+	var vertex_buffer = buffer_create(ds_list_size(position) * 3 * 8, buffer_fixed, 1);
+	var index_buffer = buffer_create(ds_list_size(index) * 4, buffer_fixed, 1);
+	
+	var count = ds_list_size(position);
+	for(var i = 0; i < count; i++) {
+		buffer_write(vertex_buffer, buffer_f64, position[| i]);
+	}
+	
+	count = ds_list_size(index);
+	for(var i = 0; i < count; i++) {
+		buffer_write(index_buffer, buffer_u32, index[| i]);
+	}
+	
+	var result = { 
+		vertex_buffer : vertex_buffer, 
+		index_buffer : index_buffer,
+		vertex_count : ds_list_size(position) / 3, 
+		face_count : array_length(vertices_per_face),
+		vertices_per_face : vertices_per_face,
+	};
+	
+	file_text_close(file);
+	ds_list_destroy(position);
+	ds_list_destroy(index);
+	return result;
 }

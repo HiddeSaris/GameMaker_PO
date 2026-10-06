@@ -17,7 +17,7 @@
     {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_model","path":"objects/obj_model/obj_model.yy",},"propertyId":{"name":"z_scale","path":"objects/obj_model/obj_model.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"0",},
     {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_model","path":"objects/obj_model/obj_model.yy",},"propertyId":{"name":"texture_sprite","path":"objects/obj_model/obj_model.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"undefined",},
     {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_model","path":"objects/obj_model/obj_model.yy",},"propertyId":{"name":"model","path":"objects/obj_model/obj_model.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"-1",},
-    {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_model","path":"objects/obj_model/obj_model.yy",},"propertyId":{"name":"col_type","path":"objects/obj_model/obj_model.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"ColShapes.None",},
+    {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_model","path":"objects/obj_model/obj_model.yy",},"propertyId":{"name":"rigid_body","path":"objects/obj_model/obj_model.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"undefined",},
   ],
   "parent":{
     "name":"Objects",

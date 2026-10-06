@@ -8,7 +8,7 @@ yfrom = yto + obj_player.camera_distance * dsin(obj_player.look_dir) * dcos(obj_
 zfrom = zto + obj_player.camera_distance * dsin(obj_player.look_pitch);
 
 view_mat = matrix_build_lookat(xfrom, yfrom, zfrom, xto, yto, zto, 0, 0, -1);
-proj_mat = matrix_build_projection_perspective_fov(60, window_get_width()/window_get_height(), 1, 32000);
+proj_mat = matrix_build_projection_perspective_fov(90, window_get_width()/window_get_height(), znear, zfar);
 
 camera_set_view_mat(camera, view_mat);
 camera_set_proj_mat(camera, proj_mat);

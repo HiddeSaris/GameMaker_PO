@@ -1,13 +1,16 @@
-camera = instance_create_depth(100, 100, depth, obj_camera);
+ballshape = CreateSphereShape(1);
+planeshape = CreateBoxShape(100, 100, 1);
+
+camera = instance_create_depth(10, 10, depth, obj_camera);
 
 #region create grid
 
 grid = vertex_create_buffer();
 vertex_begin(grid, global.vertex_format);
 
-var s = 128;
-for (var i = 0; i < room_width; i+= s){
-    for (var j = 0; j < room_height; j+= s){
+var s = 32;
+for (var i = -10*s; i < 10*s; i+= s){
+    for (var j = -10*s; j < 10*s; j+= s){
         var col;
         if ((i+j) % (2*s) == 0){
             col = c_white;
@@ -31,32 +34,28 @@ vertex_end(grid);
 #endregion
 
 skybox = import_model("meshes/skybox", global.vertex_format);
-monkey = import_model("meshes/Monkey", global.vertex_format)
+monkey = import_model("meshes/Monkey", global.vertex_format);
 
-aabb   = import_model("shapes/aabb", global.vertex_format);
+cube   = import_model("shapes/aabb", global.vertex_format);
 plane  = import_model("shapes/plane", global.vertex_format);
 point  = import_model("shapes/point", global.vertex_format);
 sphere = import_model("shapes/sphere", global.vertex_format);
 
-instance_create_depth(100, 100, depth, obj_model, {z: 50, model: aabb, x_scale: 50, y_scale: 50, z_scale: 50, col_type: ColShapes.AABB });
-instance_create_depth(0, 0, depth, obj_model, {z: -10, model: plane, x_scale: 50, y_scale: 50, z_scale: 50, col_type: ColShapes.Plane});
-instance_create_depth(200, 100, depth, obj_model, {z: 50, model: point, x_scale: 5, y_scale: 5, z_scale: 5, col_type: ColShapes.Point});
-instance_create_depth(100, 200, depth, obj_model, {z: 50, model: sphere, x_scale: 50, y_scale: 50, z_scale: 50, col_type: ColShapes.Sphere});
+var planerb = create_body(0, 0, -1, 0, 0, 0, BodyType.STATIC, planeshape, 1);
+var player = create_body(0, 0, 5, pi/2, 0, 0, BodyType.DYNAMIC, ballshape, 1);
+
+create_model(cube, -1, 1, 1, 1, 1, 1, 1);
+create_model(plane, planerb, 0, 0, -1, 1, 1, 1);
+create_model(point, -1, 2, 1, 1, 1, 1, 1);
+create_model(sphere, -1, 1, 2, 1, 1, 1, 1);
+create_model(monkey, -1, 4, 4, 1, 1, 1, 1);
 
 instance_create_depth(0, 0, depth, obj_player, {
-	z: 50,
-	x_scale: 50, 
-	y_scale: 50, 
-	z_scale: 50,
+	z: 1,
+	x_scale: 1, 
+	y_scale: 1, 
+	z_scale: 1,
 	color: c_lime,
-	model: sphere,
-	col_type: ColShapes.Sphere
-});
-instance_create_depth(400, 400, depth, obj_model, {
-	z: 50, 
-	x_scale: 50, 
-	y_scale: 50, 
-	z_scale: 50,
-    color: c_gray,
 	model: monkey,
+	rigid_body: player,
 });

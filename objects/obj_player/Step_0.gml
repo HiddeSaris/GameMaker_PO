@@ -1,3 +1,5 @@
+event_inherited();
+
 if (mouse_lock){
 	#region regular movement
 	if (window_mouse_get_x() != 0 and window_mouse_get_y() != 0){
@@ -9,59 +11,28 @@ if (mouse_lock){
 	window_mouse_set(window_get_width() / 2, window_get_height() / 2);
 	
 	var scroll = mouse_wheel_down() - mouse_wheel_up();
-	camera_distance = max(camera_distance + 30*scroll, 1);
+	camera_distance = max(camera_distance + 0.5*scroll, 1);
 	var dx = 0, dy = 0;
 	if (keyboard_check(ord("A"))) {
-	    dx += dsin(look_dir) * move_speed;
-	    dy += dcos(look_dir) * move_speed;
+	    ApplyRigidbodyWorldForceAtCenterOfMass(rigid_body.body, 5*dsin(look_dir), 5*dcos(look_dir), 0)
 	}
 	if (keyboard_check(ord("D"))) {
-	    dx -= dsin(look_dir) * move_speed;
-	    dy -= dcos(look_dir) * move_speed;
+	    ApplyRigidbodyWorldForceAtCenterOfMass(rigid_body.body, -5*dsin(look_dir), -5*dcos(look_dir), 0)
 	}
 	
+    log(look_dir);
 	if (keyboard_check(ord("W"))) {
-	    dx += dcos(look_dir) * move_speed;
-	    dy -= dsin(look_dir) * move_speed;
+	    //ApplyRigidbodyWorldTorque(rigid_body.body, dcos(look_dir), 0, dsin(look_dir));
+        ApplyRigidbodyWorldForceAtCenterOfMass(rigid_body.body, 5*dcos(look_dir), -5*dsin(look_dir), 0)
 	}
 	if (keyboard_check(ord("S"))) {
-	    dx -= dcos(look_dir) * move_speed;
-	    dy += dsin(look_dir) * move_speed;
+	    ApplyRigidbodyWorldForceAtCenterOfMass(rigid_body.body, -5*dcos(look_dir), 5*dsin(look_dir), 0)
 	}
 	
-	if (keyboard_check(vk_space)) {
-	    col_shape.position.z -= 2;
-		if (CheckCollision(obj_model)) {
-			zspeed = 10;
-		}
-	    col_shape.position.z += 2;
+	if (keyboard_check_pressed(vk_space)) {
+        ApplyRigidbodyWorldForceAtCenterOfMass(rigid_body.body, 0, 0, 500);
 	}
 	
-	col_shape.position.x += dx;
-	if (CheckCollision(obj_model)) {
-		col_shape.position.x -= dx;
-	}
-	else {
-		x += dx;
-	}
-	col_shape.position.y += dy;
-	if (CheckCollision(obj_model)) {
-		col_shape.position.y -= dy;
-	}
-	else {
-		y += dy;
-	}
-	
-	col_shape.position.z += zspeed;
-	z += zspeed;
-	if (CheckCollision(obj_model) and zspeed <= 0) {
-		col_shape.position.z -= zspeed;
-		z -= zspeed
-		zspeed = 0;
-	}
-	else {
-		zspeed -= 0.5;
-	}
 	
 	#endregion
 }
@@ -79,8 +50,3 @@ if (keyboard_check_pressed(vk_tab)){
 if (keyboard_check_direct(vk_escape)){
     game_end();
 }
-
-
-var view = dbg_view("hallo", true);
-dbg_text("hallo");
-dbg_view_delete(view);
